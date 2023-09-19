@@ -6,5 +6,5 @@ using UnityEngine.InputSystem;
 
 public class TouchMovement : MonoBehaviour
 {
-
+    
 }
