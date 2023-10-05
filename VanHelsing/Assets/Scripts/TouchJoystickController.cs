@@ -10,10 +10,15 @@ public class TouchJoystickController : MonoBehaviour
     public float rotationSpeed = 10.0f;
     public Image joystickBackground;
     public Image joystickHandle;
+    private Animator playerAnim;
 
     private Vector2 clickStartPosition;
     private Vector2 clickDirection;
 
+    private void Start()
+    {
+        playerAnim = GetComponent<Animator>();  
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -34,14 +39,18 @@ public class TouchJoystickController : MonoBehaviour
 
             if (movement != Vector3.zero)
             {
+                playerAnim.SetBool("isMoving", true);
                 Quaternion targetRotation = Quaternion.LookRotation(movement);
                 player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
+            else
+                playerAnim.SetBool("isMoving", false);
 
             joystickHandle.transform.position = clickStartPosition + clickDirection * 50; // 조절 가능한 값
         }
         if (Input.GetMouseButtonUp(0))
         {
+            playerAnim.SetBool("isMoving", false);
             joystickBackground.gameObject.SetActive(false);
             joystickHandle.transform.position = clickStartPosition;
         }
