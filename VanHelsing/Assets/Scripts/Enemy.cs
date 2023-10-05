@@ -45,8 +45,28 @@ public class Enemy : MonoBehaviour
     {
         // Yokai 몬스터의 이동 로직 구현
         // 예: 특정한 패턴으로 이동
-        Vector3 direction = (target.position - transform.position).normalized;
-        rb.velocity = direction * moveSpeed;
+        // 현재 방향
+        Vector3 currentDirection = transform.forward;
+
+        // 타겟 방향
+        Vector3 targetDirection = (target.position - transform.position).normalized;
+
+        // 회전 각도 계산
+        float angle = Vector3.SignedAngle(currentDirection, targetDirection, Vector3.up);
+
+        // 최대 회전 속도 설정 (원하는 값으로 조절)
+        float maxRotationSpeed = 90f;
+
+        // 실제로 회전할 각도 계산
+        float rotationStep = maxRotationSpeed * Time.deltaTime;
+        float rotationToApply = Mathf.Clamp(angle, -rotationStep, rotationStep);
+
+        // 회전 적용
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationToApply);
+
+        // 이동
+        rb.velocity = transform.forward * moveSpeed;
     }
 
     void ButcherMove()

@@ -8,6 +8,7 @@ public class SpawnManager : MonoBehaviour
     public float spawnInterval = 2f;    // 몬스터 스폰 간격
     public float spawnRadius = 10f;     // 스폰 위치 반경
     public Transform player;            // 플레이어의 Transform 컴포넌트
+    public Enemy enemy;
 
 
     // Start is called before the first frame update
@@ -15,6 +16,7 @@ public class SpawnManager : MonoBehaviour
     {
         // 시작 시 스폰 코루틴 시작
         StartCoroutine(SpawnMonster());
+      
     }
 
     // 코루틴으로 몬스터 스폰
