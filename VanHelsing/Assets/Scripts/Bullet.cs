@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (scanner.closestEnemy != null)
             enemyDirection = (scanner.closestEnemy.transform.position - transform.position).normalized;
-        else enemyDirection = Vector3.forward;
+        else enemyDirection = player.transform.TransformDirection(Vector3.forward);
     }
 
     // Update is called once per frame
