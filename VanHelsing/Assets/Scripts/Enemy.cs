@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     {
         // 몬스터의 종류에 따라 다른 이동 및 회전 로직 호출
         MoveBasedOnMonsterType();
-        RotateTowardsPlayer();
+        RotateTowardsDirection();
     }
 
     void MoveBasedOnMonsterType()
@@ -45,28 +45,13 @@ public class Enemy : MonoBehaviour
     {
         // Yokai 몬스터의 이동 로직 구현
         // 예: 특정한 패턴으로 이동
-        // 현재 방향
-        Vector3 currentDirection = transform.forward;
+        float circleRadius = 2f; // Adjust this value to control the size of the circle
 
-        // 타겟 방향
-        Vector3 targetDirection = (target.position - transform.position).normalized;
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        Vector3 circularDirection = Vector3.Cross(directionToTarget, Vector3.up).normalized; // Assuming movement in the XZ plane
 
-        // 회전 각도 계산
-        float angle = Vector3.SignedAngle(currentDirection, targetDirection, Vector3.up);
-
-        // 최대 회전 속도 설정 (원하는 값으로 조절)
-        float maxRotationSpeed = 90f;
-
-        // 실제로 회전할 각도 계산
-        float rotationStep = maxRotationSpeed * Time.deltaTime;
-        float rotationToApply = Mathf.Clamp(angle, -rotationStep, rotationStep);
-
-        // 회전 적용
-        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationToApply);
-
-        // 이동
-        rb.velocity = transform.forward * moveSpeed;
+        Vector3 combinedDirection = (directionToTarget + circularDirection * circleRadius).normalized;
+        rb.velocity = combinedDirection * moveSpeed;
     }
 
     void ButcherMove()
@@ -74,15 +59,16 @@ public class Enemy : MonoBehaviour
         // Butcher 몬스터의 이동 로직 구현
         // 예: 다른 패턴으로 이동
         Vector3 direction = (target.position - transform.position).normalized;
-        rb.velocity = direction * moveSpeed * 0.5f; // Type2는 느리게 이동
+        rb.velocity = direction * moveSpeed;
     }
 
-    void RotateTowardsPlayer()
+    void RotateTowardsDirection()
     {
-        if (target != null)
+        if (rb.velocity != Vector3.zero)
         {
-            // 플레이어를 바라보도록 회전
-            transform.LookAt(target);
+            // Look at the direction of movement
+            Quaternion targetRotation = Quaternion.LookRotation(rb.velocity);
+            transform.rotation = targetRotation;
         }
     }
 
