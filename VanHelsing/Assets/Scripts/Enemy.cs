@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody rb;
     public float moveSpeed;
     public MonsterType monsterType; // 몬스터의 종류
+  
 
     void Start()
     {

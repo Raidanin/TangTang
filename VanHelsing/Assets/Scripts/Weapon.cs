@@ -9,18 +9,34 @@ public class Weapon : MonoBehaviour
     public float damage;
     public GameObject[] bulletPrefab;
     private bool attackInProgress = false;
+    public GameObject player;
+    private Scanner scanner;
+    public Transform firepos;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        scanner = player.GetComponent<Scanner>();
     }
 
     // Update is called once per frame
     void Update()
     {
         AttackBaseOnWeaponType();
+        LookEnemy();
     }
+
+    private void LookEnemy()
+    {
+        if (scanner.closestEnemy != null)
+        {
+            Vector3 targetDirection = scanner.closestEnemy.transform.position - transform.position;
+            targetDirection.y = 0f; // Y 축 회전 무시
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            transform.rotation = targetRotation;
+        }
+    }
+
     void AttackBaseOnWeaponType()
     {
         switch (weaponType)
@@ -46,7 +62,7 @@ public class Weapon : MonoBehaviour
     {
         while (true)
         {
-            Instantiate(bulletPrefab[0], transform.position, Quaternion.identity);
+            Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackSpeed);
         }
     }
