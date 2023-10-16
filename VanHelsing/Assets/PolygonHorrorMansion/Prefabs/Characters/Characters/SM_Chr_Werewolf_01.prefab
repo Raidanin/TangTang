@@ -2702,7 +2702,7 @@ GameObject:
   - component: {fileID: 1240168874764604924}
   m_Layer: 0
   m_Name: SM_Chr_Werewolf_01
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2768,6 +2768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   moveSpeed: 5
+  monsterType: 0
 --- !u!136 &1728304676615675299
 CapsuleCollider:
   m_ObjectHideFlags: 0

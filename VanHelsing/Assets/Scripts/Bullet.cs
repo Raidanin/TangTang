@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,12 +18,15 @@ public class Bullet : MonoBehaviour
 
 
 
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         scanner = player.GetComponent<Scanner>();
         mainCamera = Camera.main;
+
+        
 
         if (scanner.closestEnemy != null)
         { 
@@ -79,7 +83,7 @@ public class Bullet : MonoBehaviour
         
     }
 
-    void CrossBosHit(Collider other)
+    void BulletHit(Collider other)
     {
         Rigidbody otherRigidbody = other.gameObject.GetComponent<Rigidbody>();
 
@@ -88,38 +92,21 @@ public class Bullet : MonoBehaviour
             // 뒤로 힘을 가함 (뒤로 밀치는 효과)
             Vector3 pushDirection = (other.transform.position - player.transform.position).normalized;
             otherRigidbody.AddForce(pushDirection * pushForce, ForceMode.Impulse);
+        }
 
-            // Material을 자식 오브젝트에서 찾아옴
-            Renderer renderer = other.gameObject.GetComponentInChildren<Renderer>();
-
-            if (renderer != null)
-            {
-                Material[] materials = renderer.materials;
-
-                // material을 이용한 작업 수행
-                foreach (Material mat in materials)
-                {
-                    mat.color = Color.red;
-                }
-
-                // 1초 후에 다시 원래 색상으로 복원
-                StartCoroutine(ResetMaterialColor(materials, renderer, 1f));
-            }
+        // Enemy 스크립트에서 OnHit 메서드를 호출
+        EnemyClass enemyScript = other.gameObject.GetComponent<EnemyClass>();
+        if (enemyScript != null)
+        {
+            enemyScript.OnHit();
         }
     }
 
-    System.Collections.IEnumerator ResetMaterialColor(Material[] originalMaterials, Renderer renderer, float duration)
-{
-    yield return new WaitForSeconds(duration);
-
-    // 원래 머티리얼로 복원
-    renderer.materials = originalMaterials;
-}
 
 
     private void OnTriggerEnter(Collider other)
     {
-        CrossBosHit(other);
+        BulletHit(other);
     }
 
     public enum BulletType

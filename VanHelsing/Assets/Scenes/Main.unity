@@ -1022,10 +1022,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterPrefabs:
   - {fileID: 1490722815415622, guid: fa63c57edb6fd7047a705ceae2681813, type: 3}
+  - {fileID: 1244548329400092, guid: bd120dc5c7969ed49b7dd7c80dc00d43, type: 3}
   spawnInterval: 1
   spawnRadius: 18
   player: {fileID: 4188786397103455}
-  enemy: {fileID: 0}
 --- !u!1 &1647313217
 GameObject:
   m_ObjectHideFlags: 0

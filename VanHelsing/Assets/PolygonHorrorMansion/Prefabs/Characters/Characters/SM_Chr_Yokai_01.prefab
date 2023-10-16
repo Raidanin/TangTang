@@ -1188,7 +1188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  moveSpeed: 3
+  moveSpeed: 5
   monsterType: 0
 --- !u!136 &8050935463638561413
 CapsuleCollider:

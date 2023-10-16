@@ -905,7 +905,7 @@ GameObject:
   - component: {fileID: -2997273684789743157}
   m_Layer: 0
   m_Name: SM_Chr_Gimp_01
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -946,7 +946,7 @@ Animator:
   m_GameObject: {fileID: 1244548329400092}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5572a64bd7a852043ad459aa87aa5d10, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6b17b65cd32f6d3418aefca6fdf07c37, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -970,7 +970,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  moveSpeed: 5
+  moveSpeed: 4
+  monsterType: 1
 --- !u!136 &5580911531069471410
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -121,4 +121,4 @@ MonoBehaviour:
   bullettype: 0
   bulletSpeed: 30
   disableDelay: 1
-  pushForce: 20
+  pushForce: 10
