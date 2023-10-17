@@ -26,14 +26,18 @@ public class Bullet : MonoBehaviour
         scanner = player.GetComponent<Scanner>();
         mainCamera = Camera.main;
 
-        
+
 
         if (scanner.closestEnemy != null)
-        { 
-            enemyPos = new Vector3 (scanner.closestEnemy.transform.position.x, transform.position.y, scanner.closestEnemy.transform.position.z);
+        {
+            enemyPos = new Vector3(scanner.closestEnemy.transform.position.x, transform.position.y, scanner.closestEnemy.transform.position.z); // y좌표는 화살의 y좌표로 설정
             enemyDirection = (enemyPos - transform.position).normalized;
         }
-        else enemyDirection = player.transform.TransformDirection(Vector3.forward);
+        else
+        {
+            enemyDirection = player.transform.forward;
+            enemyDirection.y = 0f; // y축은 수평으로 이동
+        }
 
     }
 
@@ -52,6 +56,8 @@ public class Bullet : MonoBehaviour
             // 1초 후에 비활성화
             Invoke("DisableObject", disableDelay);
         }
+
+    
 
     }
 
@@ -79,8 +85,11 @@ public class Bullet : MonoBehaviour
 
     void CrossBowArrowMove()
     {
-        transform.Translate(enemyDirection * bulletSpeed * Time.deltaTime);
-        
+        transform.Translate(enemyDirection * bulletSpeed * Time.deltaTime, Space.World);
+        Quaternion rotation = Quaternion.LookRotation(enemyDirection);
+        transform.rotation = rotation * Quaternion.Euler(90f,0,0);
+
+
     }
 
     void BulletHit(Collider other)
