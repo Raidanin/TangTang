@@ -3,18 +3,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Bullet : MonoBehaviour
+public class Bullets : MonoBehaviour
 {
     public BulletType bullettype;
     private GameObject player;
     private Scanner scanner;
-    public float bulletSpeed;
+    public float bulletSpeed = 10;
     private Vector3 enemyDirection;
     private Vector3 enemyPos;
+    private float[] swordAngles;
 
     public float disableDelay = 1f;
     private Camera mainCamera;
     public float pushForce = 10f;
+    private GameObject[] swords;
 
 
 
@@ -26,7 +28,12 @@ public class Bullet : MonoBehaviour
         scanner = player.GetComponent<Scanner>();
         mainCamera = Camera.main;
 
-
+        GameObject[] swords = GameObject.FindGameObjectsWithTag("Sword");
+        swordAngles = new float[swords.Length];
+        for (int i = 0; i < swords.Length; i++)
+        {
+            swordAngles[i] = i * (360.0f / swords.Length);
+        }
 
         if (scanner.closestEnemy != null)
         {
@@ -43,9 +50,8 @@ public class Bullet : MonoBehaviour
 
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-
         FlyBaseBulletType();
 
         Vector3 viewportPosition = mainCamera.WorldToViewportPoint(transform.position);
@@ -56,9 +62,6 @@ public class Bullet : MonoBehaviour
             // 1초 후에 비활성화
             Invoke("DisableObject", disableDelay);
         }
-
-    
-
     }
 
     void DisableObject()
@@ -73,13 +76,10 @@ public class Bullet : MonoBehaviour
         {
             case BulletType.crossbowArrow:
                 CrossBowArrowMove();
-
-              
-
                 break;
-
-
-
+            case BulletType.sword:
+                SwordMove();
+                break;
         }
     }
 
@@ -89,8 +89,8 @@ public class Bullet : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(enemyDirection);
         transform.rotation = rotation * Quaternion.Euler(90f,0,0);
 
-
     }
+
 
     void BulletHit(Collider other)
     {
@@ -111,15 +111,45 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    void SwordMove()
+    {
+        float distanceFromPlayer = 1.5f; // 플레이어와 검 사이의 거리
+        float rotationSpeed = 90.0f; // 회전 속도 (도/초)
 
+        for (int i = 0; i < swords.Length; i++)
+        {
+            // 각도를 업데이트합니다.
+            swordAngles[i] += rotationSpeed * Time.deltaTime;
+
+            // 회전할 위치를 계산합니다.
+            Vector3 offset = new Vector3(Mathf.Sin(swordAngles[i] * Mathf.Deg2Rad), 1, Mathf.Cos(swordAngles[i] * Mathf.Deg2Rad)) * distanceFromPlayer;
+
+            // 검의 새 위치를 설정합니다.
+            swords[i].transform.position = player.transform.position + offset;
+
+            // 검이 플레이어를 바라보도록 회전시킵니다.
+            swords[i].transform.LookAt(player.transform.position);
+            swords[i].transform.localRotation *= Quaternion.Euler(-135, 0, 0);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         BulletHit(other);
     }
 
+    public void UpdateSwords()
+    {
+        swords = GameObject.FindGameObjectsWithTag("Sword");
+        swordAngles = new float[swords.Length];
+        for (int i = 0; i < swords.Length; i++)
+        {
+            swordAngles[i] = i * (360.0f / swords.Length);
+        }
+    }
     public enum BulletType
     {
         crossbowArrow,
+        sword,
     }
 }

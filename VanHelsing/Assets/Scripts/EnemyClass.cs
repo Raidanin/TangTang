@@ -10,6 +10,7 @@ public class EnemyClass : MonoBehaviour
     private Color originalColor;
     private Renderer enemyRenderer;
     private Coroutine revertColorCoroutine; // 코루틴을 참조하기 위한 변수
+    private float enemyHp = 3;
 
 
     void Start()
@@ -26,6 +27,11 @@ public class EnemyClass : MonoBehaviour
         // 몬스터의 종류에 따라 다른 이동 및 회전 로직 호출
         MoveBasedOnMonsterType();
         RotateTowardsDirection();
+
+        if(enemyHp <=0)
+        {
+            gameObject.SetActive(false);    
+        }
     }
 
     void MoveBasedOnMonsterType()
@@ -54,6 +60,8 @@ public class EnemyClass : MonoBehaviour
         }
         enemyRenderer.material.color = Color.red; // 색상을 빨간색으로 명시적으로 설정
         revertColorCoroutine = StartCoroutine(RevertColor()); // 코루틴을 다시 시작
+
+        enemyHp--;
     }
     // 색상을 원래대로 돌리는 코루틴 메서드
     IEnumerator RevertColor()

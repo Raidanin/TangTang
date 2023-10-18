@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,16 +14,36 @@ public class Weapon : MonoBehaviour
     public Transform firepos;
     public int weaponLevel = 1;
     private bool isCrossbowCoroutineRunning = false;  // 플래그 추가
-
+    private bool isSwordAttack = false;  // 플래그 추가
+    private int swordCount = 3;
+    public GameObject[] swords;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         scanner = player.GetComponent<Scanner>();
+
+     
     }
 
     void Update()
     {
         AttackBaseOnWeaponType();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AddSword();
+        }
+    }
+
+    void AddSword()
+    {
+        GameObject newSword = Instantiate(bulletPrefab[0], player.transform.position, Quaternion.identity);
+        Array.Resize(ref swords, swords.Length + 1);
+        swords[swords.Length - 1] = newSword;
+
+        // Bullets 스크립트의 검 정보도 업데이트
+        Bullets bulletsScript = FindObjectOfType<Bullets>();
+        bulletsScript.UpdateSwords();
     }
 
     private void LookEnemy()
@@ -60,7 +81,19 @@ public class Weapon : MonoBehaviour
 
     void SwordAttack()
     {
-        int swordCount = 3;
+        if (!isSwordAttack)
+        {
+            swords = new GameObject[swordCount];
+
+            for (int i = 0; i < swordCount; i++)
+            {
+                swords[i] = Instantiate(bulletPrefab[0], player.transform.position, Quaternion.identity);
+                Bullets bulletsScript = FindObjectOfType<Bullets>();
+                bulletsScript.UpdateSwords();
+            }
+
+            isSwordAttack = true;
+        }
     }
 
     IEnumerator StartCrossbowAttack()
@@ -73,8 +106,6 @@ public class Weapon : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
-        // 코루틴이 어떠한 이유로 종료되면 플래그를 false로 설정
-        // isCrossbowCoroutineRunning = false;  // 이 코드는 현재 무한 루프 때문에 도달할 수 없습니다.
     }
 
     public enum WeaponType

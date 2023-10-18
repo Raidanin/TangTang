@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5176277440001177726
+--- !u!1 &8404459194184584066
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3021091889009053510}
-  - component: {fileID: 8225937353466565821}
-  - component: {fileID: 4812804323034046743}
-  - component: {fileID: 4732646474607080174}
-  - component: {fileID: 3645375427809928164}
+  - component: {fileID: 6314768991160448399}
+  - component: {fileID: 7331848569226994476}
+  - component: {fileID: 208135138851028590}
+  - component: {fileID: -5821246923078498021}
   m_Layer: 0
-  m_Name: CrossbowArrow
+  m_Name: Sword(W)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3021091889009053510
+--- !u!4 &6314768991160448399
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176277440001177726}
+  m_GameObject: {fileID: 8404459194184584066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.944, y: 1.141, z: 1.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8225937353466565821
+--- !u!33 &7331848569226994476
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176277440001177726}
-  m_Mesh: {fileID: -2432090755550338912, guid: eaeb5b0028bf2b4408002aea1e6a1d90, type: 3}
---- !u!23 &4812804323034046743
+  m_GameObject: {fileID: 8404459194184584066}
+  m_Mesh: {fileID: 4300000, guid: bec13a65f1758ea4f9abe0abd73de243, type: 3}
+--- !u!23 &208135138851028590
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176277440001177726}
+  m_GameObject: {fileID: 8404459194184584066}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c904c1af9a1d49a45ba878050adf8ca0, type: 2}
+  - {fileID: 2100000, guid: eb83b2b658dfc194e8b26c4421e3c748, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,40 +84,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4732646474607080174
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176277440001177726}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.48855346, y: 0.8200911, z: 4.202986}
-  m_Center: {x: -0.004022289, y: 0.4005836, z: 2.0876043}
---- !u!114 &3645375427809928164
+--- !u!114 &-5821246923078498021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176277440001177726}
+  m_GameObject: {fileID: 8404459194184584066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eac49c747baf824a9adf4f1ab20198c, type: 3}
+  m_Script: {fileID: 11500000, guid: 249eebc9dc63d1a41ba149f7c5eeb384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullettype: 0
-  bulletSpeed: 20
-  disableDelay: 1
-  pushForce: 30
+  weaponprefab: {fileID: 8404459194184584066}
+  weaponType: 1
+  attackSpeed: 1
+  damage: 0
+  bulletPrefab: []
+  player: {fileID: 0}
+  firepos: {fileID: 0}
+  weaponLevel: 1
