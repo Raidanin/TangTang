@@ -14,6 +14,7 @@ public class Weapon : MonoBehaviour
     public Transform firepos;
     public int weaponLevel = 1;
     private bool isCrossbowCoroutineRunning = false;  // 플래그 추가
+    private bool isShurikenCoroutineRunning = false;  // 플래그 추가
     private bool isSwordAttack = false;  // 플래그 추가
     private int swordCount = 3;
     public GameObject[] swords;
@@ -71,6 +72,9 @@ public class Weapon : MonoBehaviour
             case WeaponType.sword:
                 SwordAttack();
                 break;
+            case WeaponType.shuriken:
+                ShurikenAttack();
+                break;
         }
     }
 
@@ -105,15 +109,35 @@ public class Weapon : MonoBehaviour
 
         while (true)
         {
-            Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.identity);
+            Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.Euler(0, 0, 90));
             yield return new WaitForSeconds(attackSpeed);
         }
 
+    }
+
+    void ShurikenAttack() 
+    {
+        if (!isShurikenCoroutineRunning)  // 플래그 체크
+        {
+            StartCoroutine(StartShurikenAttack());
+        }
+    }
+
+    IEnumerator StartShurikenAttack()
+    {
+        isShurikenCoroutineRunning = true;  // 플래그 설정
+
+        while (true)
+        {
+            Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(attackSpeed/5);
+        }
     }
 
     public enum WeaponType
     {
         crossbow,
         sword,
+        shuriken,
     }
 }
