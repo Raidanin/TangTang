@@ -29,7 +29,10 @@ public class Weapon : MonoBehaviour
     {
         AttackBaseOnWeaponType();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+            int playerLevel = player.GetComponent<Player>().level;
+            attackSpeed = Mathf.Max(0.2f, 1f - (playerLevel * 0.05f));
+        
+        if (player.GetComponent<Player>().LevelUp())
         {
             AddSword();
         }
@@ -103,7 +106,7 @@ public class Weapon : MonoBehaviour
         while (true)
         {
             Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(attackSpeed);
         }
 
     }
