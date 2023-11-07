@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullets : MonoBehaviour
@@ -14,13 +15,14 @@ public class Bullets : MonoBehaviour
     private Camera mainCamera;
     public float pushForce = 10f;
     private GameObject[] swords;
-    public AnimationCurve noiseCurve;  // 슈리켄 노이즈를 위한 애니메이션 커브
-    private float shurikenLifeTime = 0f;
-    private bool hasTargetForShuriken = false;
+    public AnimationCurve positionCurve; // 총알의 위치 변화를 위한 애니메이션 커브
+    public AnimationCurve noiseCurve; // 총알의 노이즈 변화를 위한 애니메이션 커브
+    public float yOffset = 1f; // 목표 지점의 y축 오프셋
+    public Vector2 minNoise = new Vector2(-3f, -0.25f); // 노이즈 최소 범위
+    public Vector2 maxNoise = new Vector2(3f, 1f); // 노이즈 최대 범위
+
+    private Coroutine homingCoroutine;
     private GameObject initialShurikenTarget;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -28,9 +30,9 @@ public class Bullets : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         scanner = player.GetComponent<Scanner>();
         mainCamera = Camera.main;
-
-        GameObject[] swords = GameObject.FindGameObjectsWithTag("Sword");
+        swords = GameObject.FindGameObjectsWithTag("Sword");
         swordAngles = new float[swords.Length];
+
         for (int i = 0; i < swords.Length; i++)
         {
             swordAngles[i] = i * (360.0f / swords.Length);
@@ -38,20 +40,22 @@ public class Bullets : MonoBehaviour
 
         if (scanner.closestEnemy != null)
         {
-            enemyPos = new Vector3(scanner.closestEnemy.transform.position.x, transform.position.y, scanner.closestEnemy.transform.position.z); // y좌표는 화살의 y좌표로 설정
+            enemyPos = new Vector3(scanner.closestEnemy.transform.position.x, transform.position.y, scanner.closestEnemy.transform.position.z);
             enemyDirection = (enemyPos - transform.position).normalized;
+            if (bullettype == BulletType.shuriken)
+            {
+                initialShurikenTarget = scanner.closestEnemy;
+                if (homingCoroutine != null)
+                {
+                    StopCoroutine(homingCoroutine);
+                }
+                homingCoroutine = StartCoroutine(ShurikenMove());
+            }
         }
         else
         {
             enemyDirection = player.transform.forward;
             enemyDirection.y = 0f; // y축은 수평으로 이동
-        }
-
-        if (bullettype == BulletType.shuriken && scanner.closestEnemy != null)
-        {
-            hasTargetForShuriken = true;
-            initialShurikenTarget = scanner.closestEnemy;  // 초기 타겟 설정
-
         }
     }
 
@@ -59,40 +63,25 @@ public class Bullets : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FlyBaseBulletType();
-
-        Vector3 viewportPosition = mainCamera.WorldToViewportPoint(transform.position);
-
-        // 오브젝트가 카메라 밖으로 나가면
-        DisableBullet(viewportPosition);
-
-        ShukikenTargetReset();
-
-    }
-
-    private void ShukikenTargetReset()
-    {
-        if (hasTargetForShuriken && scanner.closestEnemy == null)
+        if (bullettype != BulletType.shuriken)
         {
-            hasTargetForShuriken = false;
+            FlyBaseBulletType();
         }
+        Vector3 viewportPosition = mainCamera.WorldToViewportPoint(transform.position);
+        DisableBullet(viewportPosition);
     }
 
     private void DisableBullet(Vector3 viewportPosition)
     {
         if (viewportPosition.x < 0 || viewportPosition.x > 1 || viewportPosition.y < 0 || viewportPosition.y > 1)
         {
-            // 1초 후에 비활성화
             Invoke("DisableObject", disableDelay);
         }
     }
-
     void DisableObject()
     {
-        // 오브젝트를 비활성화
         gameObject.SetActive(false);
     }
-
     void FlyBaseBulletType()
     {
         switch (bullettype)
@@ -103,9 +92,7 @@ public class Bullets : MonoBehaviour
             case BulletType.sword:
                 SwordMove();
                 break;
-            case BulletType.shuriken:
-                ShurikenMove();
-                break;
+                // ShurikenMove() 호출 부분 삭제
         }
     }
 
@@ -114,8 +101,8 @@ public class Bullets : MonoBehaviour
         transform.Translate(enemyDirection * bulletSpeed * Time.deltaTime, Space.World);
         Quaternion rotation = Quaternion.LookRotation(enemyDirection);
         transform.rotation = rotation * Quaternion.Euler(90f, 0, 0);
-
     }
+
 
 
     void BulletHit(Collider other)
@@ -159,44 +146,46 @@ public class Bullets : MonoBehaviour
         }
     }
 
-    void ShurikenMove()
+
+    IEnumerator ShurikenMove()
     {
-        Vector3 finalDirection;
+        Vector3 startPosition = transform.position;
+        float time = 0f;
 
-        if (hasTargetForShuriken)
+        while (time < 1f && initialShurikenTarget != null)
         {
-            if (initialShurikenTarget != null && initialShurikenTarget.activeInHierarchy)  // 초기 타겟이 아직 존재하고 활성화되어 있다면
-            {
-                Vector3 targetPosition = initialShurikenTarget.transform.position;
-                Vector3 directionToTarget = (targetPosition - transform.position).normalized;
+            Vector3 targetPosition = initialShurikenTarget.transform.position + new Vector3(0, yOffset, 0);
+            Vector3 direction = (targetPosition - startPosition).normalized;
+            Vector3 horizontalNoiseDirection = Vector3.Cross(direction, Vector3.up).normalized;
 
-                // 애니메이션 커브를 이용하여 노이즈를 추가
-                float noise = noiseCurve.Evaluate(shurikenLifeTime);
-                Vector3 noiseDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-                finalDirection = Vector3.Lerp(directionToTarget, noiseDirection, noise);
-                finalDirection.Normalize();
-            }
-            else  // 초기 타겟이 사라진 경우
-            {
-                hasTargetForShuriken = false;  // 타겟을 잃었으므로 false로 설정
-                finalDirection = enemyDirection;  // 초기 방향으로 설정
-            }
+            Vector2 noise = new Vector2(
+                Random.Range(minNoise.x, maxNoise.x),
+                Random.Range(minNoise.y, maxNoise.y)
+            );
+
+            float noisePosition = noiseCurve.Evaluate(time);
+            Vector3 noiseVector = new Vector3(
+                horizontalNoiseDirection.x * noisePosition * noise.x,
+                0, // y축 노이즈 제거
+                horizontalNoiseDirection.z * noisePosition * noise.x
+            );
+
+            transform.position = Vector3.Lerp(startPosition, targetPosition, positionCurve.Evaluate(time)) + noiseVector;
+            transform.LookAt(targetPosition);
+
+            time += Time.deltaTime * bulletSpeed;
+
+            yield return null;
         }
-        else
+
+        // 적이 없어지면 총알을 비활성화합니다.
+        if (initialShurikenTarget == null)
         {
-            finalDirection = enemyDirection;  // 초기 방향으로 설정
+            DisableObject();
         }
-
-        finalDirection.y = 0f;  // Y축 이동을 0으로 설정
-        transform.Translate(finalDirection * bulletSpeed * Time.deltaTime, Space.World);
-
-        // 수명 시간 업데이트
-        shurikenLifeTime += Time.deltaTime;
-
-        Quaternion yRotation = Quaternion.AngleAxis(shurikenLifeTime * 360, Vector3.up);
-        Quaternion zRotation = Quaternion.Euler(0, 0, -90);  // Z축으로 -90도 회전
-        transform.rotation = yRotation * zRotation;
     }
+
+
     private void OnTriggerEnter(Collider other)
     {
         BulletHit(other);

@@ -98,9 +98,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullettype: 2
-  bulletSpeed: 10
+  bulletSpeed: 3
   disableDelay: 1
   pushForce: 10
+  positionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   noiseCurve:
     serializedVersion: 2
     m_Curve:
@@ -134,6 +140,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  yOffset: 1
+  minNoise: {x: -3, y: -0.25}
+  maxNoise: {x: 3, y: 1}
 --- !u!65 &8004020475132079049
 BoxCollider:
   m_ObjectHideFlags: 0
