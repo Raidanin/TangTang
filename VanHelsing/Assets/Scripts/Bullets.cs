@@ -153,10 +153,11 @@ public class Bullets : MonoBehaviour
             Random.Range(minNoise.y, maxNoise.y)
         );
         float time = 0f;
+        float rotationSpeed = 720f; // 초당 회전 속도 (도 단위)
+        float rotation = 0f; // 초기 회전 각도, while 루프 밖으로 이동
 
         while (time < 1f)
         {
-            // 타겟의 활성화 상태를 체크합니다.
             if (initialShurikenTarget == null || !initialShurikenTarget.activeInHierarchy)
             {
                 DisableObject();
@@ -175,7 +176,9 @@ public class Bullets : MonoBehaviour
             );
 
             transform.position = Vector3.Lerp(startPosition, targetPosition, positionCurve.Evaluate(time)) + noiseVector;
-            transform.LookAt(targetPosition);
+
+            rotation += rotationSpeed * Time.deltaTime; // 회전 각도 누적
+            transform.rotation = Quaternion.Euler(0, rotation, 90); // 누적된 회전 각도 적용
 
             time += Time.deltaTime * bulletSpeed;
 
