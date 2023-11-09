@@ -15,7 +15,7 @@ public class Bullets : MonoBehaviour
     private Camera mainCamera;
     public float pushForce = 10f;
     private GameObject[] swords;
-    public AnimationCurve positionCurve;
+    [SerializeField] private AnimationCurve positionCurve;
     public AnimationCurve noiseCurve;
     public float yOffset = 1f;
     public Vector2 minNoise = new Vector2(-3f, -0.25f);
@@ -146,7 +146,7 @@ public class Bullets : MonoBehaviour
             DisableObject();
             yield break; // 코루틴 종료
         }
-
+        positionCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         Vector3 startPosition = transform.position;
         Vector2 noise = new Vector2(
             Random.Range(minNoise.x, maxNoise.x),
