@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
             currentExp -= maxExp;
             level++;
             // 레벨업 이펙트 재생 로직 추가
-            anim.SetTrigger("LevelUp"); // 예시: 레벨업 애니메이션 재생
+            //anim.SetTrigger("LevelUp"); // 예시: 레벨업 애니메이션 재생
             return true;
         }
         return false;
