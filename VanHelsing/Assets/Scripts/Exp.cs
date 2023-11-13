@@ -12,9 +12,8 @@ public class Exp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //자석기능 구현
 
-        transform.Rotate(Vector3.up, 30f * Time.deltaTime);
+        transform.Rotate(Vector3.up, 90f * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)

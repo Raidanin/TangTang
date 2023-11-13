@@ -12,6 +12,7 @@ public class EnemyClass : MonoBehaviour
     private float enemyHp = 3;
     public GameObject expPrefab;
     public GameObject hitEffectPrefab;
+    public GameObject magnet;
 
 
     void Start()
@@ -43,8 +44,13 @@ public class EnemyClass : MonoBehaviour
         {
             Vector3 expPos = new Vector3(transform.position.x, 0.5f, transform.position.z);
             Instantiate(expPrefab, expPos, Quaternion.identity);
-            gameObject.SetActive(false);
 
+            int chance = Random.Range(0, 100);
+            if (chance < 3)
+            {
+                Instantiate(magnet, expPos, Quaternion.identity);
+            }
+            gameObject.SetActive(false);
         }
     }
 
@@ -77,7 +83,7 @@ public class EnemyClass : MonoBehaviour
 
         if (hitEffectPrefab != null)
         {
-            Instantiate(hitEffectPrefab,new Vector3(transform.position.x,1,transform.position.z), Quaternion.identity);
+            Instantiate(hitEffectPrefab, new Vector3(transform.position.x, 1, transform.position.z), Quaternion.identity);
         }
 
         enemyHp--;
