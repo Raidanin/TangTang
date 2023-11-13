@@ -934,7 +934,7 @@ Transform:
   - {fileID: 4087060273135206}
   - {fileID: 4522877164986380}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &95901271245296220
 Animator:
@@ -974,6 +974,7 @@ MonoBehaviour:
   monsterType: 1
   expPrefab: {fileID: 78208678329437313, guid: ea335deae936cc74a9ba2495c91cf64c, type: 3}
   hitEffectPrefab: {fileID: 5318421549954967080, guid: ed171395475ee0c40950a9493755bd46, type: 3}
+  magnet: {fileID: 1308063170555144140, guid: 648bc7ec6ddba5544b7e81c84bef6c8e, type: 3}
 --- !u!136 &5580911531069471410
 CapsuleCollider:
   m_ObjectHideFlags: 0

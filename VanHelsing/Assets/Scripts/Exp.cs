@@ -34,7 +34,7 @@ public class Exp : MonoBehaviour
 
         if(other.CompareTag("Player"))
         {
-            other.GetComponent<Player>().curruntExp += expValue;
+            other.GetComponent<Player>().currentExp += expValue;
             thisGameObject.SetActive(false);   
         }
     }

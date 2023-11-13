@@ -25,7 +25,7 @@ public class Gamemanager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        exp.value = playerScripts.curruntExp / playerScripts.maxExp;
+        exp.value = playerScripts.currentExp / playerScripts.maxExp;
 
         if (!player.gameObject.activeInHierarchy)
         {
