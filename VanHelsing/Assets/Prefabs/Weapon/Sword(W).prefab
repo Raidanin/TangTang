@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7331848569226994476
 MeshFilter:
@@ -100,7 +100,9 @@ MonoBehaviour:
   weaponType: 1
   attackSpeed: 1
   damage: 0
-  bulletPrefab: []
+  bulletPrefab:
+  - {fileID: 8404459194184584066, guid: 9d0d32f9623e8294a937f79fbf7e1214, type: 3}
   player: {fileID: 0}
   firepos: {fileID: 0}
   weaponLevel: 1
+  swords: []
