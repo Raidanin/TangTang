@@ -109,7 +109,7 @@ public class Weapon : MonoBehaviour
 
         while (true)
         {
-            Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.Euler(0, 0, 90));
+            Instantiate(bulletPrefab[0], firepos.transform.position, firepos.rotation);
             yield return new WaitForSeconds(attackSpeed);
         }
 

@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("Exp"))
         {
+            expObjects.Remove(other.gameObject);
 
             currentExp += other.GetComponent<Exp>().expValue; 
             other.gameObject.SetActive(false);
