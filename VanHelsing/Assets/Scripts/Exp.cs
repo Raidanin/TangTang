@@ -31,12 +31,6 @@ public class Exp : MonoBehaviour
             // 자신이 아직 활성 상태라면 다른 객체를 비활성화
             otherGameObject.SetActive(false);
         }
-
-        if(other.CompareTag("Player"))
-        {
-            other.GetComponent<Player>().currentExp += expValue;
-            thisGameObject.SetActive(false);   
-        }
     }
 }
  

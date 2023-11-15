@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Gamemanager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     public Slider exp;
     private GameObject player;

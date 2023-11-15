@@ -68,6 +68,13 @@ public class Player : MonoBehaviour
             expObjects.AddRange(GameObject.FindGameObjectsWithTag("Exp"));
             other.gameObject.SetActive(false);
         }
+
+        if (other.CompareTag("Exp"))
+        {
+
+            currentExp += other.GetComponent<Exp>().expValue; 
+            other.gameObject.SetActive(false);
+        }
     }
 
     private void PullExpObjects()

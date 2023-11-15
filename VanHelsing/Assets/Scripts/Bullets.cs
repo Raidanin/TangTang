@@ -156,7 +156,7 @@ public class Bullets : MonoBehaviour
         );
         float time = 0f;
         float rotationSpeed = 720f; // 초당 회전 속도 (도 단위)
-        float rotation = 0f; // 초기 회전 각도, while 루프 밖으로 이동
+        float rotation = 0f; // 초기 각도
 
         while (time < 1f)
         {
