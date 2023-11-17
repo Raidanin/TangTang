@@ -10,7 +10,11 @@ public class UIManager : MonoBehaviour
     private GameObject player;
     private Player playerScripts;
     public Button restartButton;
-    
+    [SerializeField] GameObject levelUpCardUI;
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,20 +23,26 @@ public class UIManager : MonoBehaviour
 
         restartButton.onClick.AddListener(OnRestartButtonClicked);
         restartButton.gameObject.SetActive(false);
-            
-     }
+
+    }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         exp.value = playerScripts.currentExp / playerScripts.maxExp;
 
         if (!player.gameObject.activeInHierarchy)
         {
-            restartButton.gameObject.SetActive(true);   
-           
+            restartButton.gameObject.SetActive(true);
         }
 
+        if (playerScripts.isLevelUping)
+        {
+            levelUpCardUI.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
+        print(playerScripts.isLevelUping);
     }
 
     public void OnRestartButtonClicked()
@@ -41,7 +51,14 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
         // 시간 스케일을 다시 1로 설정
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
     }
 
+    public void CloseCardUI()
+    {
+        levelUpCardUI.SetActive(false); 
+        playerScripts.isLevelUping = false; 
+
+        playerScripts.PlayLevelUpEffect(); 
+    }
 }

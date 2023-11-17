@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +13,11 @@ public class Player : MonoBehaviour
     private Animator anim;
     private float pullForce = 10f;
     private List<GameObject> expObjects = new List<GameObject>();
+    public bool isLevelUping = false;
+    public GameObject levelUpParticle;
+    private Coroutine levelUpEffectCoroutine;
+    public event Action LevelUpEvent;
+
 
     void Start()
     {
@@ -36,18 +43,34 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool LevelUp()
+    public void LevelUp()
     {
         if (currentExp >= maxExp)
         {
+            isLevelUping = true;
             currentExp -= maxExp;
             level++;
-            // 레벨업 이펙트 재생 로직 추가
-            //anim.SetTrigger("LevelUp"); // 예시: 레벨업 애니메이션 재생
-            return true;
+            LevelUpEvent?.Invoke();
         }
-        return false;
     }
+
+
+    public void PlayLevelUpEffect()
+    {
+        if (levelUpEffectCoroutine != null)
+        {
+            StopCoroutine(levelUpEffectCoroutine); // 이미 실행 중인 코루틴이 있다면 중단
+        }
+        levelUpEffectCoroutine = StartCoroutine(ActivateLevelUpEffect());
+    }
+
+    private IEnumerator ActivateLevelUpEffect()
+    {
+        levelUpParticle.SetActive(true); // 이펙트 활성화
+        yield return new WaitForSeconds(1); // 1초 기다림
+        levelUpParticle.SetActive(false); // 이펙트 비활성화
+    }
+
 
     void Dead()
     {
@@ -73,7 +96,7 @@ public class Player : MonoBehaviour
         {
             expObjects.Remove(other.gameObject);
 
-            currentExp += other.GetComponent<Exp>().expValue; 
+            currentExp += other.GetComponent<Exp>().expValue;
             other.gameObject.SetActive(false);
         }
     }

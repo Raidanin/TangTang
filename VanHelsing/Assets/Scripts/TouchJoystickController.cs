@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TouchJoystickController : MonoBehaviour
 {
     public GameObject player;
+    Player playerScript;
     public float moveSpeed = 5.0f;
     public float rotationSpeed = 10.0f;
     public Image joystickBackground;
@@ -17,42 +16,47 @@ public class TouchJoystickController : MonoBehaviour
 
     private void Start()
     {
-        playerAnim = GetComponent<Animator>();  
+        playerAnim = GetComponent<Animator>();
+        playerScript = player.GetComponent<Player>();
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (playerScript.isLevelUping == false)
         {
-            clickStartPosition = Input.mousePosition;
-            joystickBackground.gameObject.SetActive(true);
-            joystickBackground.transform.position = clickStartPosition;
-            joystickHandle.transform.position = clickStartPosition;
-        }
-        if (Input.GetMouseButton(0))
-        {
-            Vector2 clickPosition = Input.mousePosition;
-            clickDirection = clickPosition - clickStartPosition;
-            clickDirection.Normalize();
 
-            Vector3 movement = new Vector3(clickDirection.x * moveSpeed * Time.deltaTime, 0, clickDirection.y * moveSpeed * Time.deltaTime);
-            player.transform.position += movement;
-
-            if (movement != Vector3.zero)
+            if (Input.GetMouseButtonDown(0))
             {
-                playerAnim.SetBool("isMoving", true);
-                Quaternion targetRotation = Quaternion.LookRotation(movement);
-                player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                clickStartPosition = Input.mousePosition;
+                joystickBackground.gameObject.SetActive(true);
+                joystickBackground.transform.position = clickStartPosition;
+                joystickHandle.transform.position = clickStartPosition;
             }
-            else
-                playerAnim.SetBool("isMoving", false);
+            if (Input.GetMouseButton(0))
+            {
+                Vector2 clickPosition = Input.mousePosition;
+                clickDirection = clickPosition - clickStartPosition;
+                clickDirection.Normalize();
 
-            joystickHandle.transform.position = clickStartPosition + clickDirection * 50; // 조절 가능한 값
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            playerAnim.SetBool("isMoving", false);
-            joystickBackground.gameObject.SetActive(false);
-            joystickHandle.transform.position = clickStartPosition;
+                Vector3 movement = new Vector3(clickDirection.x * moveSpeed * Time.deltaTime, 0, clickDirection.y * moveSpeed * Time.deltaTime);
+                player.transform.position += movement;
+
+                if (movement != Vector3.zero)
+                {
+                    playerAnim.SetBool("isMoving", true);
+                    Quaternion targetRotation = Quaternion.LookRotation(movement);
+                    player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                }
+                else
+                    playerAnim.SetBool("isMoving", false);
+
+                joystickHandle.transform.position = clickStartPosition + clickDirection * 50; // 조절 가능한 값
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                playerAnim.SetBool("isMoving", false);
+                joystickBackground.gameObject.SetActive(false);
+                joystickHandle.transform.position = clickStartPosition;
+            }
         }
     }
 }

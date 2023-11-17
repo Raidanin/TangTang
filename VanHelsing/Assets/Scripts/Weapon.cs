@@ -18,25 +18,27 @@ public class Weapon : MonoBehaviour
     private bool isSwordAttack = false;  // 플래그 추가
     private int swordCount = 3;
     public GameObject[] swords;
+    Player playerScript;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerScript = player.GetComponent<Player>();
         scanner = player.GetComponent<Scanner>();
+        playerScript.LevelUpEvent += HandleLevelUpEvent;
 
-     
     }
 
     void Update()
     {
         AttackBaseOnWeaponType();
 
-            int playerLevel = player.GetComponent<Player>().level;
-            attackSpeed = Mathf.Max(0.2f, 1f - (playerLevel * 0.05f));
-        
-        if (player.GetComponent<Player>().LevelUp())
-        {
-            AddSword();
-        }
+        int playerLevel = player.GetComponent<Player>().level;
+        attackSpeed = Mathf.Max(0.2f, 1f - (playerLevel * 0.05f));
+
+    }
+    void HandleLevelUpEvent()
+    {
+        AddSword();
     }
 
     void AddSword()
@@ -115,7 +117,7 @@ public class Weapon : MonoBehaviour
 
     }
 
-    void ShurikenAttack() 
+    void ShurikenAttack()
     {
         if (!isShurikenCoroutineRunning)  // 플래그 체크
         {
@@ -130,7 +132,7 @@ public class Weapon : MonoBehaviour
         while (true)
         {
             Instantiate(bulletPrefab[0], firepos.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(attackSpeed/5);
+            yield return new WaitForSeconds(attackSpeed / 5);
         }
     }
 
