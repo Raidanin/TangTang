@@ -669,7 +669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exp: {fileID: 613583604}
-  restartButton: {fileID: 1269027285}
+  uiButton: {fileID: 1269027285}
   levelUpCardUI: {fileID: 840262263}
 --- !u!1 &317656124
 GameObject:

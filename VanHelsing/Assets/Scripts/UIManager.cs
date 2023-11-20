@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     public Slider exp;
     private GameObject player;
     private Player playerScripts;
-    public Button restartButton;
+    public Button uiButton;
     [SerializeField] GameObject levelUpCardUI;
 
 
@@ -21,8 +21,8 @@ public class UIManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerScripts = player.GetComponent<Player>();
 
-        restartButton.onClick.AddListener(OnRestartButtonClicked);
-        restartButton.gameObject.SetActive(false);
+        uiButton.onClick.AddListener(OnRestartButtonClicked);
+        uiButton.gameObject.SetActive(false);
 
         Button[] buttons = levelUpCardUI.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
 
         if (!player.gameObject.activeInHierarchy)
         {
-            restartButton.gameObject.SetActive(true);
+            uiButton.gameObject.SetActive(true);
         }
 
         if (playerScripts.isLevelUping)
