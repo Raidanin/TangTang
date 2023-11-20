@@ -14,9 +14,10 @@ public class Player : MonoBehaviour
     private float pullForce = 10f;
     private List<GameObject> expObjects = new List<GameObject>();
     public bool isLevelUping = false;
-    public GameObject levelUpParticle;
+    public GameObject levelUpEffect;
     private Coroutine levelUpEffectCoroutine;
     public event Action LevelUpEvent;
+    private float effectTime = 0.5f;
 
 
     void Start()
@@ -66,9 +67,9 @@ public class Player : MonoBehaviour
 
     private IEnumerator ActivateLevelUpEffect()
     {
-        levelUpParticle.SetActive(true); // 이펙트 활성화
-        yield return new WaitForSeconds(1); // 1초 기다림
-        levelUpParticle.SetActive(false); // 이펙트 비활성화
+        levelUpEffect.SetActive(true); // 이펙트 활성화
+        yield return new WaitForSeconds(effectTime); // 1초 기다림
+        levelUpEffect.SetActive(false); // 이펙트 비활성화
     }
 
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.UI;
 
 public class TouchJoystickController : MonoBehaviour
@@ -10,6 +11,8 @@ public class TouchJoystickController : MonoBehaviour
     public Image joystickBackground;
     public Image joystickHandle;
     private Animator playerAnim;
+    [SerializeField] GameObject stick;
+    private OnScreenStick screenStick;
 
     private Vector2 clickStartPosition;
     private Vector2 clickDirection;
@@ -18,6 +21,7 @@ public class TouchJoystickController : MonoBehaviour
     {
         playerAnim = GetComponent<Animator>();
         playerScript = player.GetComponent<Player>();
+        screenStick = stick.GetComponent<OnScreenStick>();    
     }
     private void Update()
     {
@@ -49,7 +53,7 @@ public class TouchJoystickController : MonoBehaviour
                 else
                     playerAnim.SetBool("isMoving", false);
 
-                joystickHandle.transform.position = clickStartPosition + clickDirection * 50; // 조절 가능한 값
+                joystickHandle.transform.position = clickStartPosition + clickDirection * screenStick.movementRange; //
             }
             if (Input.GetMouseButtonUp(0))
             {

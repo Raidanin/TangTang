@@ -24,6 +24,12 @@ public class UIManager : MonoBehaviour
         restartButton.onClick.AddListener(OnRestartButtonClicked);
         restartButton.gameObject.SetActive(false);
 
+        Button[] buttons = levelUpCardUI.GetComponentsInChildren<Button>();
+        foreach (Button button in buttons)
+        {
+            button.onClick.AddListener(CloseCardUI);
+        }
+
     }
 
     // Update is called once per frame
@@ -57,7 +63,8 @@ public class UIManager : MonoBehaviour
     public void CloseCardUI()
     {
         levelUpCardUI.SetActive(false); 
-        playerScripts.isLevelUping = false; 
+        playerScripts.isLevelUping = false;
+        Time.timeScale = 1f;
 
         playerScripts.PlayLevelUpEffect(); 
     }
